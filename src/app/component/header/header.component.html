@@ -1,5 +1,5 @@
 <mat-toolbar
-  color="primary"
+  color="warn"
   class="position-fixed top-0 mat-elevation-z3 p-4"
   style="z-index: 999"
 >
@@ -78,7 +78,7 @@
         "
       >
         <mat-icon
-          color="primary"
+          color="warn"
           style="margin-right: 5px"
           *ngIf="
             notification.type === 'POST_LIKE' ||
@@ -87,13 +87,13 @@
           >favorite</mat-icon
         >
         <mat-icon
-          color="primary"
+          color="warn"
           style="margin-right: 5px"
           *ngIf="notification.type === 'POST_COMMENT'"
           >comment</mat-icon
         >
         <mat-icon
-          color="primary"
+          color="warn"
           style="margin-right: 5px"
           *ngIf="notification.type === 'POST_SHARE'"
           >share</mat-icon
@@ -176,7 +176,7 @@
         >
           <button
             mat-raised-button
-            color="primary"
+            color="warn"
             class="rounded-pill align-middle"
             *ngIf="hasMoreNotifications && !(fetchingResult && resultPage > 1)"
             (click)="loadNotifications(resultPage)"
@@ -207,7 +207,7 @@
 
 <button
   mat-fab
-  color="primary"
+  color="warn"
   matTooltip="Create New Post"
   matTooltipPosition="left"
   class="position-fixed"

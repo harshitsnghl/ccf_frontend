@@ -4,6 +4,30 @@ body {
 	height: 100%;
 }
 
+a:link {
+	color: red;
+	background-color: transparent;
+	text-decoration: none;
+  }
+  
+  a:visited {
+	color: red;
+	background-color: transparent;
+	text-decoration: none;
+  }
+  
+  a:hover {
+	color: blue;
+	background-color: transparent;
+	text-decoration: underline;
+  }
+  
+  a:active {
+	color: yellow;
+	background-color: transparent;
+	text-decoration: underline;
+  }
+
 body {
 	margin: 0;
 	font-family: Roboto, "Helvetica Neue", sans-serif;
