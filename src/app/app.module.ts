@@ -25,7 +25,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-
+import { NgPipesModule } from 'ngx-pipes';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthInterceptor } from './interceptor/auth.interceptor';
@@ -125,6 +125,7 @@ import { ResetPasswordComponent } from './component/reset-password/reset-passwor
     MatNativeDateModule,
     MatMomentDateModule,
     MatButtonToggleModule,
+    NgPipesModule,
   ],
   providers: [
     AuthGuard,

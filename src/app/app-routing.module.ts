@@ -12,23 +12,23 @@ import { TimelineComponent } from './component/timeline/timeline.component';
 import { VerifyEmailComponent } from './component/verify-email/verify-email.component';
 
 const routes: Routes = [
-	{ path: '', component: TimelineComponent },
-	{ path: 'posts/tags/:tagName', component: TimelineComponent },
-	{ path: 'profile', component: ProfileComponent },
-	{ path: 'users/:userId', component: ProfileComponent },
-	{ path: 'signup', component: SignupComponent },
-	{ path: 'login', component: LoginComponent },
-	{ path: 'logout', component: LogoutComponent },
-	{ path: 'settings', component: SettingsComponent },
-	{ path: 'verify-email/:token', component: VerifyEmailComponent },
-	{ path: 'reset-password/:token', component: ResetPasswordComponent },
-	{ path: 'posts/:postId', component: PostDetailComponent },
-	{ path: 'message', component: MessageComponent },
-	{ path: '**', redirectTo: '/login', pathMatch: 'full' }
+  { path: '', component: TimelineComponent },
+  { path: 'posts/tags/:tagName', component: TimelineComponent },
+  { path: 'profile', component: ProfileComponent },
+  { path: 'users/:userId', component: ProfileComponent },
+  { path: 'signup', component: SignupComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'logout', component: LogoutComponent },
+  { path: 'settings', component: SettingsComponent },
+  { path: 'verify-email/:token', component: VerifyEmailComponent },
+  { path: 'reset-password/:token', component: ResetPasswordComponent },
+  { path: 'posts/:postId', component: PostDetailComponent },
+  { path: 'message', component: MessageComponent },
+  { path: '**', redirectTo: '/login', pathMatch: 'full' },
 ];
 
 @NgModule({
-	imports: [RouterModule.forRoot(routes)],
-	exports: [RouterModule]
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

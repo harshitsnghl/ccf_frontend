@@ -1,5 +1,12 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, Input, Output, OnDestroy, OnInit, EventEmitter } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  OnDestroy,
+  OnInit,
+  EventEmitter,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
@@ -18,158 +25,161 @@ import { SnackbarComponent } from '../snackbar/snackbar.component';
 import { WaitingDialogComponent } from '../waiting-dialog/waiting-dialog.component';
 
 @Component({
-	selector: 'app-post',
-	templateUrl: './post.component.html',
-	styleUrls: ['./post.component.css']
+  selector: 'app-post',
+  templateUrl: './post.component.html',
+  styleUrls: ['./post.component.css'],
 })
 export class PostComponent implements OnInit, OnDestroy {
-	@Input() postResponse: PostResponse;
-	@Input() isDetailedPost: boolean;
-	@Output() postDeletedEvent = new EventEmitter<PostResponse>();
-	authUserId: number;
-	defaultProfilePhotoUrl = environment.defaultProfilePhotoUrl;
+  @Input() postResponse: PostResponse;
+  @Input() isDetailedPost: boolean;
+  @Output() postDeletedEvent = new EventEmitter<PostResponse>();
+  authUserId: number;
+  defaultProfilePhotoUrl = environment.defaultProfilePhotoUrl;
 
-	private subscriptions: Subscription[] = [];
+  private subscriptions: Subscription[] = [];
 
-	constructor(
-		private matDialog: MatDialog,
-		private matSnackbar: MatSnackBar,
-		private authService: AuthService,
-		private postService: PostService) { }
+  constructor(
+    private matDialog: MatDialog,
+    private matSnackbar: MatSnackBar,
+    private authService: AuthService,
+    private postService: PostService
+  ) {}
 
-	ngOnInit(): void {
-		this.authUserId = this.authService.getAuthUserId();
-	}
+  ngOnInit(): void {
+    this.authUserId = this.authService.getAuthUserId();
+  }
 
-	ngOnDestroy(): void {
-		this.subscriptions.forEach(sub => sub.unsubscribe());
-	}
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
+  }
 
-	openLikeDialog(): void {
-		this.matDialog.open(PostLikeDialogComponent, {
-			data: this.postResponse.post,
-			minWidth: '400px',
-			maxWidth: '700px'
-		});
-	}
+  openLikeDialog(): void {
+    this.matDialog.open(PostLikeDialogComponent, {
+      data: this.postResponse.post,
+      minWidth: '400px',
+      maxWidth: '700px',
+    });
+  }
 
-	openCommentDialog(): void {
-		const dialogRef = this.matDialog.open(PostCommentDialogComponent, {
-			data: this.postResponse.post,
-			autoFocus: false,
-			minWidth: '500px',
-			maxWidth: '700px'
-		});
+  openCommentDialog(): void {
+    const dialogRef = this.matDialog.open(PostCommentDialogComponent, {
+      data: this.postResponse.post,
+      autoFocus: false,
+      minWidth: '500px',
+      maxWidth: '700px',
+    });
 
-		dialogRef.componentInstance.updatedCommentCountEvent.subscribe(
-			data => this.postResponse.post.commentCount = data
-		);
-	}
+    dialogRef.componentInstance.updatedCommentCountEvent.subscribe(
+      (data) => (this.postResponse.post.commentCount = data)
+    );
+  }
 
-	openShareDialog(): void {
-		const dialogRef = this.matDialog.open(PostShareDialogComponent, {
-			data: this.postResponse.post,
-			autoFocus: false,
-			minWidth: '500px',
-			maxWidth: '700px'
-		});
-	}
+  openShareDialog(): void {
+    const dialogRef = this.matDialog.open(PostShareDialogComponent, {
+      data: this.postResponse.post,
+      autoFocus: false,
+      minWidth: '500px',
+      maxWidth: '700px',
+    });
+  }
 
-	openShareConfirmDialog(): void {
-		this.matDialog.open(ShareConfirmDialogComponent, {
-			data: this.postResponse.post,
-			autoFocus: false,
-			minWidth: '500px',
-			maxWidth: '700px'
-		});
-	}
+  openShareConfirmDialog(): void {
+    this.matDialog.open(ShareConfirmDialogComponent, {
+      data: this.postResponse.post,
+      autoFocus: false,
+      minWidth: '500px',
+      maxWidth: '700px',
+    });
+  }
 
-	openPostEditDialog(): void {
-		const dialogRef = this.matDialog.open(PostDialogComponent, {
-			data: this.postResponse.post,
-			autoFocus: false,
-			minWidth: '500px',
-			maxWidth: '900px'
-		});
-	}
+  openPostEditDialog(): void {
+    const dialogRef = this.matDialog.open(PostDialogComponent, {
+      data: this.postResponse.post,
+      autoFocus: false,
+      minWidth: '500px',
+      maxWidth: '900px',
+    });
+  }
 
-	openPostDeleteConfirmDialog(): void {
-		const dialogRef = this.matDialog.open(ConfirmationDialogComponent, {
-			data: 'Do you want to delete this post permanently?',
-			autoFocus: false,
-			width: '500px'
-		});
+  openPostDeleteConfirmDialog(): void {
+    const dialogRef = this.matDialog.open(ConfirmationDialogComponent, {
+      data: 'Do you want to delete this post permanently?',
+      autoFocus: false,
+      width: '500px',
+    });
 
-		dialogRef.afterClosed().subscribe(
-			result => {
-				if (result) this.deletePost(this.postResponse.post.id, this.postResponse.post.isTypeShare);
-			}
-		);
-	}
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result)
+        this.deletePost(
+          this.postResponse.post.id,
+          this.postResponse.post.isTypeShare
+        );
+    });
+  }
 
-	deletePost(postId: number, isTypeShare: boolean): void {
-		const dialogRef = this.matDialog.open(WaitingDialogComponent, {
-			data: 'Please, wait while we are deleting the post.',
-			width: '500px',
-			disableClose: true
-		});
+  deletePost(postId: number, isTypeShare: boolean): void {
+    const dialogRef = this.matDialog.open(WaitingDialogComponent, {
+      data: 'Please, wait while we are deleting the post.',
+      width: '500px',
+      disableClose: true,
+    });
 
-		this.subscriptions.push(
-			this.postService.deletePost(postId, isTypeShare).subscribe({
-				next: (response: any) => {
-					this.postDeletedEvent.emit(this.postResponse);
-					dialogRef.close();
-					this.matSnackbar.openFromComponent(SnackbarComponent, {
-						data: 'Post deleted successfully.',
-						panelClass: ['bg-success'],
-						duration: 5000
-					});
-				},
-				error: (errorResponse: HttpErrorResponse) => {
-					this.matSnackbar.openFromComponent(SnackbarComponent, {
-						data: AppConstants.snackbarErrorContent,
-						panelClass: ['bg-danger'],
-						duration: 5000
-					});
-					dialogRef.close();
-				}
-			})
-		);
-	}
+    this.subscriptions.push(
+      this.postService.deletePost(postId, isTypeShare).subscribe({
+        next: (response: any) => {
+          this.postDeletedEvent.emit(this.postResponse);
+          dialogRef.close();
+          this.matSnackbar.openFromComponent(SnackbarComponent, {
+            data: 'Post deleted successfully.',
+            panelClass: ['bg-success'],
+            duration: 5000,
+          });
+        },
+        error: (errorResponse: HttpErrorResponse) => {
+          this.matSnackbar.openFromComponent(SnackbarComponent, {
+            data: AppConstants.snackbarErrorContent,
+            panelClass: ['bg-danger'],
+            duration: 5000,
+          });
+          dialogRef.close();
+        },
+      })
+    );
+  }
 
-	likeOrUnlikePost(likedByAuthUser: boolean) {
-		if (likedByAuthUser) {
-			this.subscriptions.push(
-				this.postService.unlikePost(this.postResponse.post.id).subscribe({
-					next: (response: any) => {
-						this.postResponse.likedByAuthUser = false;
-						this.postResponse.post.likeCount--;
-					},
-					error: (errorResponse: HttpErrorResponse) => {
-						this.matSnackbar.openFromComponent(SnackbarComponent, {
-							data: AppConstants.snackbarErrorContent,
-							panelClass: ['bg-danger'],
-							duration: 5000
-						});
-					}
-				})
-			);
-		} else {
-			this.subscriptions.push(
-				this.postService.likePost(this.postResponse.post.id).subscribe({
-					next: (response: any) => {
-						this.postResponse.likedByAuthUser = true;
-						this.postResponse.post.likeCount++;
-					},
-					error: (errorResponse: HttpErrorResponse) => {
-						this.matSnackbar.openFromComponent(SnackbarComponent, {
-							data: AppConstants.snackbarErrorContent,
-							panelClass: ['bg-danger'],
-							duration: 5000
-						});
-					}
-				})
-			);
-		}
-	}
+  likeOrUnlikePost(likedByAuthUser: boolean) {
+    if (likedByAuthUser) {
+      this.subscriptions.push(
+        this.postService.unlikePost(this.postResponse.post.id).subscribe({
+          next: (response: any) => {
+            this.postResponse.likedByAuthUser = false;
+            this.postResponse.post.likeCount--;
+          },
+          error: (errorResponse: HttpErrorResponse) => {
+            this.matSnackbar.openFromComponent(SnackbarComponent, {
+              data: AppConstants.snackbarErrorContent,
+              panelClass: ['bg-danger'],
+              duration: 5000,
+            });
+          },
+        })
+      );
+    } else {
+      this.subscriptions.push(
+        this.postService.likePost(this.postResponse.post.id).subscribe({
+          next: (response: any) => {
+            this.postResponse.likedByAuthUser = true;
+            this.postResponse.post.likeCount++;
+          },
+          error: (errorResponse: HttpErrorResponse) => {
+            this.matSnackbar.openFromComponent(SnackbarComponent, {
+              data: AppConstants.snackbarErrorContent,
+              panelClass: ['bg-danger'],
+              duration: 5000,
+            });
+          },
+        })
+      );
+    }
+  }
 }
