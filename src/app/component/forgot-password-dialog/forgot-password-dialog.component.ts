@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -15,14 +15,14 @@ import { SnackbarComponent } from '../snackbar/snackbar.component';
 	styleUrls: ['./forgot-password-dialog.component.css']
 })
 export class ForgotPasswordDialogComponent implements OnInit, OnDestroy {
-	forgotPasswordFormGroup: FormGroup;
+	forgotPasswordFormGroup: UntypedFormGroup;
 	fetchingResult: boolean = false;
 
 	private subscriptions: Subscription[] = [];
 
 	constructor(
 		private userService: UserService,
-		private formBuilder: FormBuilder,
+		private formBuilder: UntypedFormBuilder,
 		private matSnackbar: MatSnackBar,
 		private thisDialogRef: MatDialogRef<ForgotPasswordDialogComponent>,
 		private router: Router) { }
@@ -31,7 +31,7 @@ export class ForgotPasswordDialogComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.forgotPasswordFormGroup = this.formBuilder.group({
-			email: new FormControl('', [Validators.required, Validators.email, Validators.maxLength(64)])
+			email: new UntypedFormControl('', [Validators.required, Validators.email, Validators.maxLength(64)])
 		});
 	}
 

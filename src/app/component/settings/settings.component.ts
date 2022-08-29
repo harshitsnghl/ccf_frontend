@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { AppConstants } from 'src/app/common/app-constants';
@@ -27,9 +27,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
 	authUserId: number;
 	submittingForm: boolean = false;
 	countryList: Country[] = [];
-	updateInfoFormGroup: FormGroup;
-	updateEmailFormGroup: FormGroup;
-	updatePasswordFormGroup: FormGroup;
+	updateInfoFormGroup: UntypedFormGroup;
+	updateEmailFormGroup: UntypedFormGroup;
+	updatePasswordFormGroup: UntypedFormGroup;
 	repeatPasswordMatcher = new RepeatPasswordMatcher();
 
 	private subscriptions: Subscription[] = [];
@@ -38,7 +38,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 		private authService: AuthService,
 		private userService: UserService,
 		private countryService: CountryService,
-		private formBuilder: FormBuilder,
+		private formBuilder: UntypedFormBuilder,
 		private matSnackbar: MatSnackBar,
 		private router: Router) { }
 
@@ -60,7 +60,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 	get updatePasswordPasswordRepeat() { return this.updatePasswordFormGroup.get('passwordRepeat') }
 	get updatePasswordOldPassword() { return this.updatePasswordFormGroup.get('oldPassword') }
 
-	matchPasswords: ValidatorFn = (group: FormGroup): ValidationErrors | null => {
+	matchPasswords: ValidatorFn = (group: UntypedFormGroup): ValidationErrors | null => {
 		const password = group.get('password').value;
 		const passwordRepeat = group.get('passwordRepeat').value;
 		return password === passwordRepeat ? null : { passwordMissMatch: true }
@@ -80,27 +80,27 @@ export class SettingsComponent implements OnInit, OnDestroy {
 			});
 
 			this.updateInfoFormGroup = this.formBuilder.group({
-				firstName: new FormControl(this.authUser.firstName, [Validators.required, Validators.maxLength(64)]),
-				lastName: new FormControl(this.authUser.lastName, [Validators.required, Validators.maxLength(64)]),
-				intro: new FormControl(this.authUser.intro, [Validators.maxLength(100)]),
-				hometown: new FormControl(this.authUser.hometown, [Validators.maxLength(128)]),
-				currentCity: new FormControl(this.authUser.currentCity, [Validators.maxLength(128)]),
-				eduInstitution: new FormControl(this.authUser.eduInstitution, [Validators.maxLength(128)]),
-				workplace: new FormControl(this.authUser.workplace, [Validators.maxLength(128)]),
+				firstName: new UntypedFormControl(this.authUser.firstName, [Validators.required, Validators.maxLength(64)]),
+				lastName: new UntypedFormControl(this.authUser.lastName, [Validators.required, Validators.maxLength(64)]),
+				intro: new UntypedFormControl(this.authUser.intro, [Validators.maxLength(100)]),
+				hometown: new UntypedFormControl(this.authUser.hometown, [Validators.maxLength(128)]),
+				currentCity: new UntypedFormControl(this.authUser.currentCity, [Validators.maxLength(128)]),
+				eduInstitution: new UntypedFormControl(this.authUser.eduInstitution, [Validators.maxLength(128)]),
+				workplace: new UntypedFormControl(this.authUser.workplace, [Validators.maxLength(128)]),
 				gender: [this.authUser.gender],
 				countryName: [this.authUser.country ? this.authUser.country.name : null],
 				birthDate: [this.authUser.birthDate]
 			});
 
 			this.updateEmailFormGroup = this.formBuilder.group({
-				email: new FormControl(this.authUser.email, [Validators.required, Validators.email, Validators.maxLength(64)]),
-				password: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(32)])
+				email: new UntypedFormControl(this.authUser.email, [Validators.required, Validators.email, Validators.maxLength(64)]),
+				password: new UntypedFormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(32)])
 			});
 
 			this.updatePasswordFormGroup = this.formBuilder.group({
-				password: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(32)]),
-				passwordRepeat: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(32)]),
-				oldPassword: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(32)])
+				password: new UntypedFormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(32)]),
+				passwordRepeat: new UntypedFormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(32)]),
+				oldPassword: new UntypedFormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(32)])
 			}, { validators: this.matchPasswords });
 		}
 	}

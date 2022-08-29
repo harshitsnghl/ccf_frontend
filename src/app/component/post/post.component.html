@@ -26,7 +26,7 @@
         >watch_later</mat-icon
       >
       <span class="align-middle ps-1 small fw-500">{{
-        postResponse.post.dateCreated | timeAgo
+        getDate(postResponse.post.dateCreated) | timeAgo
       }}</span>
     </mat-card-subtitle>
   </mat-card-header>
@@ -133,7 +133,7 @@
               >watch_later</mat-icon
             >
             <span class="align-middle ps-1 small fw-500">
-              {{ postResponse.post.sharedPost.dateCreated | date: "medium" }}
+              {{ getDate(postResponse.post.sharedPost.dateCreated) | timeAgo }}
             </span>
           </span>
 

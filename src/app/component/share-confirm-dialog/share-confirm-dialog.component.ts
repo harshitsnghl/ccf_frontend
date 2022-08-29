@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -18,7 +18,7 @@ import { SnackbarComponent } from '../snackbar/snackbar.component';
 })
 export class ShareConfirmDialogComponent implements OnInit, OnDestroy {
 	targetPostId: number;
-	shareFormGroup: FormGroup;
+	shareFormGroup: UntypedFormGroup;
 	creatingShare: boolean = false;
 	defaultProfilePhotoUrl = environment.defaultProfilePhotoUrl;
 
@@ -29,14 +29,14 @@ export class ShareConfirmDialogComponent implements OnInit, OnDestroy {
 		private thisMatDialogRef: MatDialogRef<ShareConfirmDialogComponent>,
 		private router: Router,
 		private postService: PostService,
-		private formBuilder: FormBuilder,
+		private formBuilder: UntypedFormBuilder,
 		private matSnackbar: MatSnackBar) { }
 
 	get content() { return this.shareFormGroup.get('content'); }
 
 	ngOnInit(): void {
 		this.shareFormGroup = this.formBuilder.group({
-			content: new FormControl('', [Validators.maxLength(4096)])
+			content: new UntypedFormControl('', [Validators.maxLength(4096)])
 		});
 
 		this.targetPostId = this.dataPost.isTypeShare ? this.dataPost.sharedPost.id : this.dataPost.id;

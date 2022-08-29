@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -19,7 +19,7 @@ import { SnackbarComponent } from '../snackbar/snackbar.component';
 })
 export class ResetPasswordComponent implements OnInit, OnDestroy {
 	token: string;
-	resetPasswordFormGroup: FormGroup;
+	resetPasswordFormGroup: UntypedFormGroup;
 	fetchingResult: boolean = false;
 	repeatPasswordMatcher = new RepeatPasswordMatcher();
 
@@ -28,7 +28,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
 	constructor(
 		private userService: UserService,
 		private router: Router,
-		private formBuilder: FormBuilder,
+		private formBuilder: UntypedFormBuilder,
 		private matSnackbar: MatSnackBar,
 		private activatedRoute: ActivatedRoute,
 		private matDialog: MatDialog) { }
@@ -40,8 +40,8 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
 		this.token = this.activatedRoute.snapshot.paramMap.get('token');
 
 		this.resetPasswordFormGroup = this.formBuilder.group({
-			password: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(32)]),
-			passwordRepeat: new FormControl('', [Validators.required])
+			password: new UntypedFormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(32)]),
+			passwordRepeat: new UntypedFormControl('', [Validators.required])
 		}, { validators: this.matchPasswords });
 	}
 
@@ -49,7 +49,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
 		this.subscriptions.forEach(sub => sub.unsubscribe());
 	}
 
-	matchPasswords: ValidatorFn = (group: FormGroup): ValidationErrors | null => {
+	matchPasswords: ValidatorFn = (group: UntypedFormGroup): ValidationErrors | null => {
 		const password = group.get('password').value;
 		const passwordRepeat = group.get('passwordRepeat').value;
 		return password === passwordRepeat ? null : { passwordMissMatch: true }

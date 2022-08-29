@@ -1,3 +1,4 @@
+import { momentDateConvertor } from './../../utils/momentDateConvertor';
 import { HttpErrorResponse } from '@angular/common/http';
 import {
   Component,
@@ -23,7 +24,7 @@ import { PostShareDialogComponent } from '../post-share-dialog/post-share-dialog
 import { ShareConfirmDialogComponent } from '../share-confirm-dialog/share-confirm-dialog.component';
 import { SnackbarComponent } from '../snackbar/snackbar.component';
 import { WaitingDialogComponent } from '../waiting-dialog/waiting-dialog.component';
-
+import * as moment from 'moment';
 @Component({
   selector: 'app-post',
   templateUrl: './post.component.html',
@@ -181,5 +182,9 @@ export class PostComponent implements OnInit, OnDestroy {
         })
       );
     }
+  }
+
+  getDate(date) {
+    return momentDateConvertor(date);
   }
 }

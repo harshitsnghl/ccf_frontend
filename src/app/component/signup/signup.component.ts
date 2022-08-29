@@ -1,6 +1,6 @@
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -19,14 +19,14 @@ import { SnackbarComponent } from '../snackbar/snackbar.component';
 export class SignupComponent implements OnInit, OnDestroy {
 	repeatPasswordMatcher = new RepeatPasswordMatcher();
 	submittingForm: boolean = false;
-	signupFormGroup: FormGroup;
+	signupFormGroup: UntypedFormGroup;
 
 	private subscriptions: Subscription[] = [];
 
 	constructor(
 		private authService: AuthService,
 		private router: Router,
-		private formBuilder: FormBuilder,
+		private formBuilder: UntypedFormBuilder,
 		private matSnackbar: MatSnackBar) { }
 
 	ngOnInit(): void {
@@ -36,19 +36,19 @@ export class SignupComponent implements OnInit, OnDestroy {
 
 		this.signupFormGroup = this.formBuilder.group({
 			infoGroup: this.formBuilder.group({
-				firstName: new FormControl('',
+				firstName: new UntypedFormControl('',
 					[Validators.required, Validators.maxLength(64)]
 				),
-				lastName: new FormControl('',
+				lastName: new UntypedFormControl('',
 					[Validators.required, Validators.maxLength(64)]
 				),
-				email: new FormControl('',
+				email: new UntypedFormControl('',
 					[Validators.required, Validators.email, Validators.maxLength(64)]
 				)
 			}),
 			passwordGroup: this.formBuilder.group({
-				password: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(32)]),
-				passwordRepeat: new FormControl('', [Validators.required])
+				password: new UntypedFormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(32)]),
+				passwordRepeat: new UntypedFormControl('', [Validators.required])
 			})
 		}, { validators: this.matchPasswords });
 
@@ -64,7 +64,7 @@ export class SignupComponent implements OnInit, OnDestroy {
 	get password() { return this.signupFormGroup.get('passwordGroup.password') }
 	get passwordRepeat() { return this.signupFormGroup.get('passwordGroup.passwordRepeat') }
 
-	matchPasswords: ValidatorFn = (group: FormGroup): ValidationErrors | null => {
+	matchPasswords: ValidatorFn = (group: UntypedFormGroup): ValidationErrors | null => {
 		const password = group.get('passwordGroup.password').value;
 		const passwordRepeat = group.get('passwordGroup.passwordRepeat').value;
 		return password === passwordRepeat ? null : { passwordMissMatch: true }

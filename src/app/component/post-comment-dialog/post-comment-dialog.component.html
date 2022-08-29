@@ -76,7 +76,7 @@
               >watch_later</mat-icon
             >
             <span class="align-middle ps-1 small fw-500">{{
-              commentResponse.comment.dateCreated | date: "medium"
+              getDate(commentResponse.comment.dateCreated) | timeAgo
             }}</span>
           </span>
 

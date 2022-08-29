@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
@@ -8,17 +8,17 @@ import { MatDialogRef } from '@angular/material/dialog';
 	styleUrls: ['./tag-dialog.component.css']
 })
 export class TagDialogComponent implements OnInit {
-	tagFormGroup: FormGroup;
+	tagFormGroup: UntypedFormGroup;
 
 	constructor(
 		private thisDialogRef: MatDialogRef<TagDialogComponent>,
-		private formBuilder: FormBuilder) { }
+		private formBuilder: UntypedFormBuilder) { }
 
 	get name() { return this.tagFormGroup.get('name'); } 
 
 	ngOnInit(): void {
 		this.tagFormGroup = this.formBuilder.group({
-			name: new FormControl('', [Validators.minLength(3), Validators.maxLength(64)])
+			name: new UntypedFormControl('', [Validators.minLength(3), Validators.maxLength(64)])
 		});
 	}
 

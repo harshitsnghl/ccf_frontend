@@ -1,6 +1,6 @@
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -18,7 +18,7 @@ import { SnackbarComponent } from '../snackbar/snackbar.component';
 	styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit, OnDestroy {
-	loginFormGroup: FormGroup;
+	loginFormGroup: UntypedFormGroup;
 	submittingForm: boolean = false;
 
 	private subscriptions: Subscription[] = [];
@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 	constructor(
 		private authService: AuthService,
 		private router: Router,
-		private formBuilder: FormBuilder,
+		private formBuilder: UntypedFormBuilder,
 		private matSnackbar: MatSnackBar,
 		private matDialog: MatDialog) { }
 
@@ -40,10 +40,10 @@ export class LoginComponent implements OnInit, OnDestroy {
 		}
 
 		this.loginFormGroup = this.formBuilder.group({
-			email: new FormControl('',
+			email: new UntypedFormControl('',
 				[Validators.required, Validators.email]
 			),
-			password: new FormControl('',
+			password: new UntypedFormControl('',
 				[Validators.required, Validators.minLength(6), Validators.maxLength(32)]
 			)
 		});

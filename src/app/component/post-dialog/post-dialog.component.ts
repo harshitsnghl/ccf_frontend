@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -19,7 +19,7 @@ import { TagDialogComponent } from '../tag-dialog/tag-dialog.component';
 	styleUrls: ['./post-dialog.component.css']
 })
 export class PostDialogComponent implements OnInit, OnDestroy {
-	postFormGroup: FormGroup;
+	postFormGroup: UntypedFormGroup;
 	postPhoto: File;
 	postPhotoPreviewUrl: string;
 	postTags: any[] = [];
@@ -30,7 +30,7 @@ export class PostDialogComponent implements OnInit, OnDestroy {
 	constructor(
 		@Inject(MAT_DIALOG_DATA) public dataPost: Post,
 		private postService: PostService,
-		private formBuilder: FormBuilder,
+		private formBuilder: UntypedFormBuilder,
 		private router: Router,
 		private matDialog: MatDialog,
 		private matDialogRef: MatDialogRef<PostDialogComponent>,
@@ -40,7 +40,7 @@ export class PostDialogComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.postFormGroup = this.formBuilder.group({
-			content: new FormControl(((this.dataPost && this.dataPost.content) ? this.dataPost.content : ''), [Validators.maxLength(4096)])
+			content: new UntypedFormControl(((this.dataPost && this.dataPost.content) ? this.dataPost.content : ''), [Validators.maxLength(4096)])
 		});
 
 		if (this.dataPost) {

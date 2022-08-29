@@ -38,7 +38,7 @@
               >watch_later</mat-icon
             >
             <span class="align-middle ps-1 small fw-500">{{
-              postShareResponse.post.dateCreated | date: "medium"
+              getDate(postShareResponse.post.dateCreated) | timeAgo
             }}</span>
           </span>
 

@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -19,7 +19,7 @@ import { SnackbarComponent } from '../snackbar/snackbar.component';
 })
 export class SearchDialogComponent implements OnInit, OnDestroy {
 	searchResult: UserResponse[] = [];
-	searchUserFormGroup: FormGroup;
+	searchUserFormGroup: UntypedFormGroup;
 	resultPage: number = 1;
 	resultSize: number = 5;
 	hasMoreResult: boolean = false;
@@ -31,7 +31,7 @@ export class SearchDialogComponent implements OnInit, OnDestroy {
 
 	constructor(
 		private userService: UserService,
-		private formBuilder: FormBuilder,
+		private formBuilder: UntypedFormBuilder,
 		private matSnackbar: MatSnackBar,
 		private matDialog: MatDialog,
 		private router: Router) { }
@@ -40,7 +40,7 @@ export class SearchDialogComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.searchUserFormGroup = this.formBuilder.group({
-			key: new FormControl('', [Validators.minLength(3), Validators.maxLength(64)])
+			key: new UntypedFormControl('', [Validators.minLength(3), Validators.maxLength(64)])
 		});
 	}
 
