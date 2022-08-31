@@ -80,8 +80,58 @@
             }}</span>
           </span>
 
-          <p class="pt-2 pb-3">{{ commentResponse.comment.content }}</p>
-
+          <p class="pt-2 pb-3" *ngIf="!commentResponse.edit">
+            {{ commentResponse.comment.content }}
+          </p>
+          <form
+            [formGroup]="editCommentFormGroup"
+            #editCommentForm="ngForm"
+            (ngSubmit)="editComment(commentResponse)"
+            class="position-relative pt-1 pb-2"
+          >
+            <mat-form-field
+              *ngIf="commentResponse.edit"
+              appearance="outline"
+              class="w-100"
+              style="padding-right: 90px"
+            >
+              <mat-label>Edit comment</mat-label>
+              <textarea
+                matInput
+                formControlName="content"
+                placeholder="Edit comment"
+                [value]="commentResponse.comment.content"
+              ></textarea>
+              <mat-error
+                *ngIf="
+                  editedContent.hasError('required') &&
+                  editCommentForm.submitted
+                "
+              >
+                Comment cannot be empty
+              </mat-error>
+              <mat-error *ngIf="editedContent.hasError('maxlength')">
+                Comment length cannot exceed 1024 characters
+              </mat-error>
+            </mat-form-field>
+            <button
+              *ngIf="commentResponse.edit"
+              mat-raised-button
+              color="warn"
+              type="submit"
+              class="position-absolute mt-1"
+              style="top: 4px; right: 0"
+            >
+              <div
+                *ngIf="updatingComment"
+                class="position-absolute"
+                style="transform: scale(0.3); top: -35px; right: -35px"
+              >
+                <mat-spinner></mat-spinner>
+              </div>
+              <span *ngIf="!updatingComment">Update</span>
+            </button>
+          </form>
           <mat-chip-list aria-label="Fish selection">
             <mat-chip
               class="me-3 cursor-pointer"
@@ -113,6 +163,14 @@
                 "
                 >favorite</mat-icon
               >
+            </button>
+            <button
+              mat-icon-button
+              matTooltip="Edit"
+              *ngIf="commentResponse.comment.author.id === authUserId"
+              (click)="toggleEditComment(commentResponse)"
+            >
+              <mat-icon class="text-secondary">edit</mat-icon>
             </button>
             <button
               mat-icon-button

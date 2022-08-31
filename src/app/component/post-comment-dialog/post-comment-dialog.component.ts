@@ -46,7 +46,9 @@ export class PostCommentDialogComponent implements OnInit, OnDestroy {
   hasMoreResult: boolean = false;
   fetchingResult: boolean = false;
   creatingComment: boolean = false;
+  updatingComment: boolean = false;
   commentFormGroup: UntypedFormGroup;
+  editCommentFormGroup: UntypedFormGroup;
   defaultProfilePhotoUrl = environment.defaultProfilePhotoUrl;
 
   private subscriptions: Subscription[] = [];
@@ -65,10 +67,21 @@ export class PostCommentDialogComponent implements OnInit, OnDestroy {
     return this.commentFormGroup.get('content');
   }
 
+  get editedContent() {
+    return this.editCommentFormGroup.get('content');
+  }
+
   ngOnInit(): void {
     this.authUserId = this.authService.getAuthUserId();
 
     this.commentFormGroup = this.formBuilder.group({
+      content: new UntypedFormControl('', [
+        Validators.required,
+        Validators.maxLength(1024),
+      ]),
+    });
+
+    this.editCommentFormGroup = this.formBuilder.group({
       content: new UntypedFormControl('', [
         Validators.required,
         Validators.maxLength(1024),
@@ -92,9 +105,10 @@ export class PostCommentDialogComponent implements OnInit, OnDestroy {
             .getPostComments(this.dataPost.id, currentPage, this.resultSize)
             .subscribe({
               next: (resultList: CommentResponse[]) => {
-                resultList.forEach((commentResponse) =>
-                  this.commentResponseList.push(commentResponse)
-                );
+                resultList.forEach((commentResponse) => {
+                  commentResponse.edit = false;
+                  this.commentResponseList.push(commentResponse);
+                });
                 if (
                   currentPage * this.resultSize <
                   this.dataPost.commentCount
@@ -117,6 +131,52 @@ export class PostCommentDialogComponent implements OnInit, OnDestroy {
             })
         );
       }
+    }
+  }
+
+  toggleEditComment(commentResponse: CommentResponse) {
+    this.editCommentFormGroup.controls['content'].setValue(
+      commentResponse.comment.content
+    );
+    commentResponse.edit = !commentResponse.edit;
+  }
+
+  editComment(commentResponse: CommentResponse) {
+    if (commentResponse != this.editedContent.value) {
+      this.updatingComment = true;
+      this.subscriptions.push(
+        this.commentService
+          .updateComment(
+            this.dataPost.id,
+            commentResponse.comment.id,
+            this.editedContent.value
+          )
+          .subscribe({
+            next: (updatedComment: CommentResponse) => {
+              commentResponse.comment.content = this.editedContent.value;
+              this.editCommentFormGroup.reset();
+              Object.keys(this.editCommentFormGroup.controls).forEach((key) => {
+                this.editCommentFormGroup.get(key).setErrors(null);
+              });
+              this.updatingComment = false;
+              commentResponse.edit = false;
+            },
+            error: (errorResponse: HttpErrorResponse) => {
+              this.matSnackbar.openFromComponent(SnackbarComponent, {
+                data: AppConstants.snackbarErrorContent,
+                panelClass: ['bg-danger'],
+                duration: 5000,
+              });
+              this.updatingComment = false;
+            },
+          })
+      );
+    } else {
+      this.matSnackbar.openFromComponent(SnackbarComponent, {
+        data: AppConstants.sameContentErrorComment,
+        panelClass: ['bg-danger'],
+        duration: 5000,
+      });
     }
   }
 

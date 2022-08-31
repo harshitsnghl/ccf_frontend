@@ -23,10 +23,21 @@
     }}</span>
   </a>
 
-  <a mat-raised-button class="me-3" *ngIf="!isUserLoggedIn" href="/login"
+  <a
+    mat-raised-button
+    style="color: white"
+    class="me-3"
+    *ngIf="!isUserLoggedIn"
+    href="/login"
     >Login</a
   >
-  <a mat-raised-button *ngIf="!isUserLoggedIn" href="/signup">Signup</a>
+  <a
+    mat-raised-button
+    style="color: white"
+    *ngIf="!isUserLoggedIn"
+    href="/signup"
+    >Signup</a
+  >
 
   <div *ngIf="isUserLoggedIn">
     <button mat-icon-button (click)="openSearchDialog()">
